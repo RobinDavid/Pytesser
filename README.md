@@ -2,16 +2,19 @@ Pytesser
 ========
 
 Python wrapper for the tesseract OCR engine. The module is based on OpenCV.
-Article : http://robindavid.comli.com/pytesser-python-wrapper-for-the-tesseract-ocr-engine/
+
 
 Informations
 ------------
 
-There is already multiples module called pytesser, but this one is slightly different on the following point:
+There is already multiples tesseract python modules, but none of them satisfied me. This one is different on the following point:
 
-* It implement all the features of tesseract engine it includes the choise of the language and the page segmentation mode.
-* All the module is contained in one file (the others modules I have tried are quite messy.
-* It support OpenCV, so you can directly provide an IplImage to the module.
+* All the classes are put in the same file and all inessential class are removed
+* Use OpenCV instead of PIL (to really an advantage because PIL as far more widespread, but better fit my needs ;))
+* Use subprocess.communicate instead of subprocess.wait to avoid any output in the shell or in the programs that use the module.
+* Management of the differents languages via the option '-l' because the original pytesser use the default language which is english. By this way the detection of french for instance is totally inacurrate.
+* Management of of the pagesegmode, which allow to modify the behavior of tesseract if we want for instance to detect only one character, a word or a line.
+* The code is far more straightforward (my opinion)
 
 How to use it ?
 ---------------
