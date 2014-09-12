@@ -4,6 +4,12 @@ try:
 except ImportError:
     OPENCV_AVAILABLE = False
 
+try:
+    import cv2
+    OPENCV2_AVAILABLE = True
+except ImportError:
+    OPENCV2_AVAILABLE = False
+
 from subprocess import Popen, PIPE
 import os
 
@@ -47,8 +53,8 @@ def process_request(input_file, output_file, lang=None, psm=None):
         args.append(str(psm))
     proc = Popen(args, stdout=PIPE, stderr=PIPE) #Open process
     ret = proc.communicate() #Launch it
-    
-    code = proc.returncode 
+
+    code = proc.returncode
     if code != 0:
         if code == 2:
             raise TesseractException, "File not found"
@@ -66,7 +72,7 @@ def iplimage_to_string(im, lang=None, psm=None):
         txt = image_to_string(TEMP_IMAGE, lang, psm)
         os.remove(TEMP_IMAGE)
         return txt
-        
+
 def image_to_string(file,lang=None, psm=None):
     check_path() #Check if tesseract available in the path
     process_request(file, TEMP_FILE, lang, psm) #Process command
@@ -74,7 +80,16 @@ def image_to_string(file,lang=None, psm=None):
     txt = f.read()
     os.remove(TEMP_FILE+".txt")
     return txt
-    
-    
+
+def mat_to_string(im, lang=None, psm=None):
+    if not OPENCV2_AVAILABLE:
+        print "cv2 is not Available"
+        return -1
+    else:
+        cv2.imwrite(TEMP_IMAGE, im)
+        txt = image_to_string(TEMP_IMAGE, lang, psm)
+        os.remove(TEMP_IMAGE)
+        return txt
+
 if __name__ =='__main__':
     print image_to_string("image.jpg", "fra", PSM_AUTO) #Example
