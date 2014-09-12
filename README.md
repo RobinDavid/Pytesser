@@ -32,3 +32,8 @@ Or you can directly give it an IplImage like this:
 
     image = cv.LoadImage("myimage.jpg")
     txt = pytesser.iplimage_to_string(image) 
+
+Or give it a mat:
+
+    image = cv2.imwrite("myimage.jpg")
+    txt = pytesser.mat_to_string(image) 
