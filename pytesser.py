@@ -78,6 +78,7 @@ def image_to_string(file,lang=None, psm=None):
     process_request(file, TEMP_FILE, lang, psm) #Process command
     f = open(TEMP_FILE+".txt","r") #Open back the file
     txt = f.read()
+    f.close()
     os.remove(TEMP_FILE+".txt")
     return txt
 
