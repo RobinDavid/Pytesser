@@ -2,10 +2,11 @@ import sys
 from subprocess import Popen, PIPE
 import os
 import tempfile
+import cv2
 
 PROG_NAME = 'tesseract'
 TEMP_IMAGE = tempfile.mktemp()+'.bmp'
-TEMP_FILE = tempfile.mktemp()+".txt"
+TEMP_FILE = tempfile.mktemp()
 
 #All the PSM arguments as a variable name (avoid having to know them)
 PSM_OSD_ONLY = 0
@@ -54,18 +55,23 @@ def process_request(input_file, output_file, lang=None, psm=None):
             raise TesseractException(ret[1])
 
 def image_to_string(im, lang=None, psm=None):
-    cv2.imwrite(TEMP_IMAGE, im)
+    grayscale_image = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite(TEMP_IMAGE, grayscale_image)
     txt = image_file_to_string(TEMP_IMAGE, lang, psm)
     os.remove(TEMP_IMAGE)
     return txt
 
 def image_file_to_string(file, lang=None, psm=None):
     check_path() #Check if tesseract available in the path
-    process_request(file, TEMP_FILE, lang, psm) #Process command
-    f = open(TEMP_FILE, "r") #Open back the file
+    grayscale_image = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2GRAY)
+    cv2.imwrite(TEMP_IMAGE, grayscale_image)
+    #process_request(file, TEMP_FILE, lang, psm)
+    process_request(TEMP_IMAGE, TEMP_FILE, lang, psm)
+    f = open(TEMP_FILE+".txt", "r") #Open back the file
     txt = f.read()
     f.close()
-    os.remove(TEMP_FILE)
+    os.remove(TEMP_FILE+".txt")
+    os.remove(TEMP_IMAGE)
     return txt
 
 
