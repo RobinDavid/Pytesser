@@ -16,24 +16,31 @@ There is already multiples tesseract python modules, but none of them satisfied 
 * Management of of the pagesegmode, which allow to modify the behavior of tesseract if we want for instance to detect only one character, a word or a line.
 * The code is far more straightforward (my opinion)
 
+Installation
+------------
+
+```bash
+sudo apt-get install tesseract tesseract-ocr-all
+sudo pip install opencv-python
+```
+
 How to use it ?
 ---------------
 
-There is to ways to use it. Either you give it a filename, either directly an IplImage. For a filename you can do:
+There is to ways to use it. Either you give it a filename, either directly an image. For a filename you can do:
 
-    import pytesser
-    txt = pytesser.image_to_string("myimage.jpg") #By default language is eng, and page seg mode auto
+```python
+import pytesser
+txt = pytesser.image_file_to_string("myimage.jpg")
+#By default language is eng, and page seg mode auto
 
-    #To give specifify parameters:
-    txt = pytesser.image_to_string("myimage.jpg","fra",pytesser.PSM_SINGLE_WORD) #Analyse image as a single french word
+#To give specifify parameters:
+txt = pytesser.image_to_string("myimage.jpg","fra",pytesser.PSM_SINGLE_WORD) #Analyse image as a single french word
+```
 
+Or you can directly give it an OpenCV image like this:
 
-Or you can directly give it an IplImage like this:
-
-    image = cv.LoadImage("myimage.jpg")
-    txt = pytesser.iplimage_to_string(image) 
-
-Or give it a mat:
-
-    image = cv2.imwrite("myimage.jpg")
-    txt = pytesser.mat_to_string(image) 
+```python
+image = cv2.imread("myimage.jpg")
+txt = pytesser.image_to_string(image) 
+```
